@@ -39,8 +39,20 @@ class Tree
   def search(root, value)
     return root if root.nil? || root.value == value
     return search(root.right, value) if root.value < value
-
     search(root.left, value)
+  end
+
+  def level_order
+    return if @root.nil?
+    root = @root
+    queue = []
+    queue.push(root)
+    until queue.empty?
+      current = queue.shift
+      current.value=(yield(current.value))
+      queue.push(current.left) unless current.left.nil?
+      queue.push(current.right) unless current.right.nil?
+    end
   end
 
   private
@@ -104,4 +116,5 @@ tree.insert(3)
 tree.insert(15)
 tree.insert(7)
 tree.delete(15)
-p tree.find(7)
+tree.level_order{|a| 30}
+p tree.root
