@@ -104,4 +104,4 @@ tree.insert(3)
 tree.insert(15)
 tree.insert(7)
 tree.delete(15)
-p tree.root
+p tree.find(7)
