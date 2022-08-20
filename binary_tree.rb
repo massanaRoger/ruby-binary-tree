@@ -47,12 +47,24 @@ class Tree
     root = @root
     queue = []
     queue.push(root)
+    final_arr = []
     until queue.empty?
       current = queue.shift
-      current.value=(yield(current.value))
+      if block_given?
+        current.value=(yield(current.value))
+      else
+        final_arr.push(current.value)
+      end
       queue.push(current.left) unless current.left.nil?
       queue.push(current.right) unless current.right.nil?
     end
+    return final_arr unless block_given?
+  end
+
+  def pretty_print(node = @root, prefix = '', is_left = true)
+    pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
+    puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.value}"
+    pretty_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left
   end
 
   private
@@ -109,12 +121,6 @@ class Tree
   end
 end
 
-# tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
-tree = Tree.new([7, 9])
-tree.insert(2)
-tree.insert(3)
-tree.insert(15)
-tree.insert(7)
-tree.delete(15)
-tree.level_order{|a| 30}
-p tree.root
+tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
+tree.pretty_print
+p tree.level_order
