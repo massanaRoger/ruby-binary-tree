@@ -85,6 +85,11 @@ class Tree
     pretty_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left
   end
 
+  def height_tree
+    height_rec(@root)
+  end
+
+
   private
 
   def insert_rec(root, value)
@@ -170,10 +175,19 @@ class Tree
       arr.push(node.value)
     end
   end
+
+  def height_rec(root)
+    return 0 if root.nil?
+    h_left = height_rec(root.left)
+    h_right = height_rec(root.right)
+    h_left > h_right ? h_left + 1 : h_right + 1
+  end
 end
 
 tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
+tree.insert(50)
 p tree.in_order
 p tree.pre_order
 p tree.post_order
 tree.pretty_print
+p tree.height_tree
