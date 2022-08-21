@@ -61,6 +61,24 @@ class Tree
     return final_arr unless block_given?
   end
 
+  def in_order(&block)
+    arr = []
+    self.in_order_rec(root, arr, &block)
+    return arr unless block_given?
+  end
+
+  def pre_order(&block)
+    arr = []
+    self.pre_order_rec(root, arr, &block)
+    return arr unless block_given?
+  end
+
+  def post_order(&block)
+    arr = []
+    self.post_order_rec(root, arr, &block)
+    return arr unless block_given?
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.value}"
@@ -119,8 +137,43 @@ class Tree
     end
     minv
   end
+
+  def in_order_rec(node, arr, &block)
+    return if node.nil?
+    in_order_rec(node.left, arr, &block)
+    if block_given?
+      node.value = block.call(node.value)
+    else
+      arr.push(node.value)
+    end
+    in_order_rec(node.right, arr, &block)
+  end
+
+  def pre_order_rec(node, arr, &block)
+    return if node.nil?
+    if block_given?
+      node.value = block.call(node.value)
+    else
+      arr.push(node.value)
+    end
+    in_order_rec(node.left, arr, &block)
+    in_order_rec(node.right, arr, &block)
+  end
+
+  def post_order_rec(node, arr, &block)
+    return if node.nil?
+    in_order_rec(node.left, arr, &block)
+    in_order_rec(node.right, arr, &block)
+    if block_given?
+      node.value = block.call(node.value)
+    else
+      arr.push(node.value)
+    end
+  end
 end
 
 tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
+p tree.in_order
+p tree.pre_order
+p tree.post_order
 tree.pretty_print
-p tree.level_order
