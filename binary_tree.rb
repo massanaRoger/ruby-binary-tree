@@ -213,9 +213,17 @@ class Tree
   end
 end
 
-tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
-tree.pretty_print
-tree.insert(50)
+arr = Array.new(15) { rand(1..100) }
+tree = Tree.new(arr)
+p tree.in_order
+p tree.pre_order
+p tree.post_order
+for el in 0..100
+  tree.insert(rand(1..100))
+end
 puts tree.balanced?
 tree.rebalance
 puts tree.balanced?
+p tree.in_order
+p tree.pre_order
+p tree.post_order
