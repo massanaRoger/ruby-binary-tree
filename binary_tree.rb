@@ -93,6 +93,9 @@ class Tree
     depth_rec(@root, node)
   end
 
+  def balanced?
+    balanced_rec?(@root)
+  end
   private
 
   def insert_rec(root, value)
@@ -196,9 +199,16 @@ class Tree
     end
     dist
   end
+  
+  def balanced_rec?(node)
+    return true if node.nil?
+    lh = height_rec(node.left)
+    rh = height_rec(node.right)
+    return true if ((lh - rh).abs <= 1 && balanced_rec?(node.left) && balanced_rec?(node.right))
+    false
+  end
 end
 
 tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
-tree.insert(50)
 tree.pretty_print
-puts tree.depth(23)
+puts tree.balanced?
