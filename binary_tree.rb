@@ -88,7 +88,10 @@ class Tree
   def height_tree
     height_rec(@root)
   end
-
+  
+  def depth(node)
+    depth_rec(@root, node)
+  end
 
   private
 
@@ -182,12 +185,20 @@ class Tree
     h_right = height_rec(root.right)
     h_left > h_right ? h_left + 1 : h_right + 1
   end
+
+  def depth_rec(root, x)
+    return -1 if root.nil?
+    dist = -1
+    if (root.value == x ||
+      (dist = depth_rec(root.left, x)) >= 0 ||
+      (dist = depth_rec(root.right, x)) >= 0)
+      dist += 1
+    end
+    dist
+  end
 end
 
 tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
 tree.insert(50)
-p tree.in_order
-p tree.pre_order
-p tree.post_order
 tree.pretty_print
-p tree.height_tree
+puts tree.depth(23)
